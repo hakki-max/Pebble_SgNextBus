@@ -4,7 +4,8 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 
-const app = express();
+const app = express();   // ✅ THIS LINE FIXES YOUR ERROR
+
 app.use(cors());
 
 app.get('/bus-arrival', async (req, res) => {
@@ -17,7 +18,8 @@ app.get('/bus-arrival', async (req, res) => {
                     ServiceNo: "14"
                 },
                 headers: {
-                    AccountKey: process.env.LTA_API_KEY
+                    AccountKey: process.env.LTA_API_KEY,
+                    accept: "application/json"
                 }
             }
         );
@@ -25,7 +27,7 @@ app.get('/bus-arrival', async (req, res) => {
         res.json(response.data);
     } catch (error) {
         console.error(error.message);
-        res.status(500).send("Error");
+        res.status(500).send("Error fetching data");
     }
 });
 
@@ -34,3 +36,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+``
