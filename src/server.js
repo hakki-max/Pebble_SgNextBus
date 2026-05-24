@@ -25,10 +25,15 @@ app.get('/bus-arrival', async (req, res) => {
         );
 
         res.json(response.data);
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send("Error fetching data");
-    }
+    } 
+catch (error) {
+    console.error("FULL ERROR:", error.response?.data || error.message);
+
+    res.status(500).json({
+        error: error.response?.data || error.message
+    });
+
+}
 });
 
 const PORT = process.env.PORT || 3000;

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SG NextBus Settings</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, sans-serif;
+      background: #f2f2f7;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #1c1c1e;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #8e8e93;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #3a3a3c;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d1d6;
+      border-radius: 8px;
+      font-size: 15px;
+      color: #1c1c1e;
+      background: #fafafa;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #CC1111;
+      background: white;
+    }
+    .hint {
+      font-size: 12px;
+      color: #8e8e93;
+      margin-top: 6px;
+    }
+    .hint a {
+      color: #CC1111;
+    }
+    .btn-save {
+      width: 100%;
+      padding: 14px;
+      background: #CC1111;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .btn-save:active {
+      background: #aa0000;
+    }
+    .btn-cancel {
+      width: 100%;
+      padding: 14px;
+      background: #e5e5ea;
+      color: #1c1c1e;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .status {
+      font-size: 13px;
+      color: #34c759;
+      margin-top: 8px;
+      text-align: center;
+      min-height: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h1>SG NextBus</h1>
+  <p class="subtitle">Configure your LTA DataMall API key</p>
+
+  <label>LTA DataMall API Key</label>
+  <input type="text" id="api-key" placeholder="Paste your API key here" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <p class="hint">
+    Get a free key at
+    <a href="https://datamall.lta.gov.sg/content/datamall/en/request-for-api.html" target="_blank">
+      datamall.lta.gov.sg
+    </a>
+  </p>
+  <p class="status" id="status"></p>
+</div>
+
+<button class="btn-save" onclick="save()">Save</button>
+<button class="btn-cancel" onclick="cancel()">Cancel</button>
+
+<script>
+  // Load existing key on page open
+  var currentKey = '';
+  try {
+    var raw = decodeURIComponent(location.search.substring(1));
+    var params = JSON.parse(raw);
+    currentKey = params.apiKey || '';
+  } catch(e) {}
+
+  if (currentKey) {
+    document.getElementById('api-key').value = currentKey;
+    document.getElementById('status').textContent = 'API key loaded';
+  }
+
+  function save() {
+    var key = document.getElementById('api-key').value.trim();
+    if (!key) {
+      document.getElementById('status').textContent = 'Please enter an API key';
+      document.getElementById('status').style.color = '#ff3b30';
+      return;
+    }
+    var result = JSON.stringify({ apiKey: key });
+    location.href = 'pebblejs://close#' + encodeURIComponent(result);
+  }
+
+  function cancel() {
+    location.href = 'pebblejs://close#';
+  }
+</script>
+
+</body>
+</html>
